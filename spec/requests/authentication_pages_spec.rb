@@ -9,6 +9,16 @@ describe "Authentication" do
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
 
+      describe "profile link and settings link should not appear" do
+        before do
+          visit user_path
+
+          it { should_not have_link('Settings', href: edit_user_path(user)) }
+          it { should_not have_link('Profile',  href: user_path(user)) }
+        end
+      end
+
+
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
@@ -50,17 +60,6 @@ describe "Authentication" do
       end
     end
 
-    describe "as non-admin user" do
-      let(:user) {FactoryGirl.create(:user) }
-      let(:non_admin) {FactoryGirl.create(:user) }
-
-      before { sign_in non_admin}
-
-      describe "submitting a DELETE request to the Users#destroy action" do
-        before{ delete user_path(user) }
-        specify { response.should redirect_to(root_path) }
-      end
-    end
   end
 
   describe "signin page" do
