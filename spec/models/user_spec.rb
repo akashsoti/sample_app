@@ -30,6 +30,18 @@ describe User do
     it { should be_admin }
   end
 
+  describe "when User admin attribute isn't accessible" do
+    
+     it "should raise mass assign error" do
+     expect { User.new(name: "Example User",
+                       email: "example@gmail.com",
+                       password: "foobar",
+                       password_confirmation: "foobar",
+                       admin: true).save }.
+                    to raise_error(ActiveModel::MassAssignmentSecurity::Error)
+    end
+  end
+
   describe "when name is not present" do
     before { @user.name = " " }
     it { should_not be_valid }
