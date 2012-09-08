@@ -22,6 +22,20 @@ describe "Micropost pages" do
       end
     end
 
+    describe "pagination microposts" do
+      before do
+        31.times { FactoryGirl.create(:micropost, user: user) }
+        visit root_path
+      end
+
+      it {should have_selector('div.pagination')}
+      it "should list each microposts" do
+        Micropost.paginate(page: 1).each do |micropost|
+        page.should have_selector('li', text: micropost.content)
+        end
+      end
+    end
+
     describe "with valid information" do
 
       before { fill_in 'micropost_content', with: "Lorem ipsum" }
