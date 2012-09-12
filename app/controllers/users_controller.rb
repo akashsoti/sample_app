@@ -66,8 +66,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    q = "%" +params[:search_content]+"%"
-    @users = User.where("name LIKE ? ", q).paginate(page: params[:page])
+   @users = User.search
   end
 
   private

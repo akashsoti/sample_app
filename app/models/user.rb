@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  
+
   attr_accessible(:name, :email, :password, :password_confirmation)
   has_secure_password
   has_many :microposts, dependent: :destroy
@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true	
 
+
   def feed
     Micropost.from_users_followed_by(self)
   end
@@ -34,6 +35,11 @@ class User < ActiveRecord::Base
 
   def unfollow!(other_user)
     relationships.find_by_followed_id(other_user.id).destroy
+  end
+
+  def search
+    q = "%" +params[:search_content]+"%"
+    @users = User.where("name LIKE ? ", q).paginate(page: params[:page])
   end
 
   private
