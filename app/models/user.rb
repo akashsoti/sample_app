@@ -37,11 +37,6 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id).destroy
   end
 
-  def search
-    q = "%" +params[:search_content]+"%"
-    @users = User.where("name LIKE ? ", q).paginate(page: params[:page])
-  end
-
   private
 
     def create_remember_token
