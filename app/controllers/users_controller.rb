@@ -65,6 +65,11 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  def search
+    q = "%" +params[:search_content]+"%"
+    @users = User.where("name LIKE ? ", q).paginate(page: params[:page])
+  end
+
   private
 
     def correct_user
