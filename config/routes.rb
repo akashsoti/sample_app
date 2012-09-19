@@ -1,4 +1,6 @@
 SampleApp::Application.routes.draw do
+  get 'verify/:token' => 'users#verify'
+
   resources :users do
     member do
       get :following, :followers
@@ -16,6 +18,8 @@ SampleApp::Application.routes.draw do
   match '/signup',  to: 'users#new' 
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete 
+
+  get "search" => 'users#search'
 
 
 

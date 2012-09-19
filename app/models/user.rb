@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   attr_accessible(:name, :email, :password, :password_confirmation)
   has_secure_password
   has_many :microposts, dependent: :destroy
@@ -11,13 +12,15 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
                                    
   before_save :fix_email
-  before_save :create_remember_token
+  before_save :create_remember_token, :create_verification_token
 
 	validates :name,  presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 }
-  validates :password_confirmation, presence: true	
+  validates :password, length: { minimum: 6 }, on: :create
+  validates_presence_of :password, :password_confirmation, on: :create
+
+  scope :search_user, ->(user) { where( "name LIKE ? ", "%#{user}%").order(:name) }
 
   def feed
     Micropost.from_users_followed_by(self)
@@ -43,5 +46,9 @@ class User < ActiveRecord::Base
 
     def fix_email
   	  self.email = self.email.downcase if email?
+    end
+
+    def create_verification_token
+      self.verification_token = SecureRandom.urlsafe_base64
     end
 end

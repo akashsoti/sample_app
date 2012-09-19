@@ -1,0 +1,12 @@
+<% provide(:title, 'Search Result') %>
+<h1>Search Result for <%= params[:search_content] %> </h1>
+<% if(!@users.empty?) %>
+  <%= will_paginate %>
+    <ul class="users">
+      <%= render @users %>
+    </ul>
+  <%= will_paginate %>
+<% else %>
+<h3>Sorry, No Result found</h3>
+<% end %>	
+
