@@ -1,4 +1,6 @@
 SampleApp::Application.routes.draw do
+  get 'verify/:token' => 'users#verify'
+
   resources :users do
     member do
       get :following, :followers

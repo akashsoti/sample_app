@@ -1,5 +1,5 @@
 class AddverificationTouser < ActiveRecord::Migration
   def change
-  	add_column :users, :verification, :boolean, default: true
+  	add_column :users, :is_verify, :boolean, default: false
   end
 end

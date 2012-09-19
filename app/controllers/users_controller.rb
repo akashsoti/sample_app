@@ -16,17 +16,16 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      sign_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+      Verification.send_link(@user).deliver
+      flash[:success] = "Welcome, a verification link has been sent to your email"
     else
       flash[:error] = "Error while saving"
-      render 'new'
     end
+    render 'new'
   end
 
   def destroy
-      user = User.find(params[:id])
+    user = User.find(params[:id])
     unless user.admin?
       user.destroy
       flash[:success] = "User destroyed"
@@ -51,6 +50,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def verify
+    @user = User.find_by_verification_token(params[:token])
+    if @user 
+      pd = @user.password_digest
+      @user.is_verify = true
+      @user.password_digest = pd
+      @user.save
+      redirect_to signin_path
+    else
+      redirect_to root_path
+    end
+  end
+
    def following
     @title = "Following"
     @user = User.find(params[:id])
@@ -66,8 +78,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    q = "%" +params[:search_content]+"%"
-    @users = User.where("name LIKE ? ", q).paginate(page: params[:page])
+    @users = User.search_user(params[:search_content]).paginate(page: params[:page])
   end
 
   private
