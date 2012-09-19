@@ -53,17 +53,14 @@ class UsersController < ApplicationController
   def verify
     @user = User.find_by_verification_token(params[:token])
     if @user 
-      pd = @user.password_digest
-      @user.is_verify = true
-      @user.password_digest = pd
-      @user.save
+      @user.verify_user
       redirect_to signin_path
     else
       redirect_to root_path
     end
   end
 
-   def following
+  def following
     @title = "Following"
     @user = User.find(params[:id])
     @users = @user.followed_users.paginate(page: params[:page])
