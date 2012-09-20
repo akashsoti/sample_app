@@ -35,10 +35,9 @@ SampleApp::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
   
-  config.action_mailer.delivery_method = :smtp
-  
+  config.action_mailer.delivery_method = :smtps
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "smtps.gmail.com",
     port: 587,
     domain: "gmail.com",
     authentication: "plain",

@@ -39,9 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def verify_user
-    pd = self.password_digest
     self.is_verify = true
-    self.password_digest = pd
     self.save
   end
 
