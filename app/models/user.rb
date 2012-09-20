@@ -38,6 +38,13 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id).destroy
   end
 
+  def verify_user
+    pd = self.password_digest
+    self.is_verify = true
+    self.password_digest = pd
+    self.save
+  end
+
   private
 
     def create_remember_token
