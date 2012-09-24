@@ -16,7 +16,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      Verification.send_link(@user).deliver
       flash[:success] = "Welcome, a verification link has been sent to your email"
     else
       flash[:error] = "Error while saving"

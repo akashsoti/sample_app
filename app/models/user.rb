@@ -22,6 +22,8 @@ class User < ActiveRecord::Base
 
   scope :search_user, ->(user) { where( "name LIKE ? ", "%#{user}%").order(:name) }
 
+  after_create :send_mail
+
   def feed
     Micropost.from_users_followed_by(self)
   end
@@ -44,6 +46,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+    def send_mail
+      Verification.send_link(self).deliver
+    end
 
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
