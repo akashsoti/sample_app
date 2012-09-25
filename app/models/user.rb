@@ -41,6 +41,10 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id).destroy
   end
 
+  def verified?
+    is_verify?
+  end
+
   def verify_user
     self.is_verify = true
     destroy_verification_token 

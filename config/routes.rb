@@ -1,5 +1,5 @@
 SampleApp::Application.routes.draw do
-  get 'verify/:token' => 'users#verify'
+  get 'verify/:token' => 'users#verify', :as => :verify_token
 
   resources :users do
     member do
